@@ -22,4 +22,6 @@ RUN autoreconf -fiv && ./configure --with-jpeg8 && make install
 FROM alpine:3.7
 COPY --from=builder /opt/mozjpeg /opt/mozjpeg
 COPY ./optimize.sh /optimize.sh
+
 ENV PATH=${PATH}:/opt/mozjpeg/bin
+CMD /optimize.sh
