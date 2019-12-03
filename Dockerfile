@@ -1,5 +1,5 @@
 FROM alpine:3.7 as builder
-ARG MOZJPEG_VERSION=3.3.1
+ARG VERSION=3.3.1
 
 
 RUN apk --update add \
@@ -12,10 +12,10 @@ RUN apk --update add \
 	tar
 
 WORKDIR /src
-ADD https://github.com/mozilla/mozjpeg/archive/v${MOZJPEG_VERSION}.tar.gz ./
-RUN tar -xzf v${MOZJPEG_VERSION}.tar.gz
+ADD https://github.com/mozilla/mozjpeg/archive/v${VERSION}.tar.gz ./
+RUN tar -xzf v${VERSION}.tar.gz
 
-WORKDIR /src/mozjpeg-${MOZJPEG_VERSION}
+WORKDIR /src/mozjpeg-${VERSION}
 RUN autoreconf -fiv && ./configure --with-jpeg8 --prefix=/mozjpeg && make install
 
 
