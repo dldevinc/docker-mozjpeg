@@ -24,8 +24,8 @@ INPLACE=$?
 if [ "$INPLACE" == "1" ]
 then
 	tmpfile=$(mktemp)
-	/mozjpeg/bin/cjpeg $@ -outfile ${tmpfile} $INPUTFILE
+	cjpeg $@ -outfile ${tmpfile} $INPUTFILE
 	mv ${tmpfile} $INPUTFILE
 else
-	/mozjpeg/bin/cjpeg $@ $INPUTFILE
+	cjpeg $@ $INPUTFILE
 fi

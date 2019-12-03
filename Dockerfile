@@ -16,9 +16,10 @@ ADD https://github.com/mozilla/mozjpeg/archive/v${VERSION}.tar.gz ./
 RUN tar -xzf v${VERSION}.tar.gz
 
 WORKDIR /src/mozjpeg-${VERSION}
-RUN autoreconf -fiv && ./configure --with-jpeg8 --prefix=/mozjpeg && make install
+RUN autoreconf -fiv && ./configure --with-jpeg8 && make install
 
 
 FROM alpine:3.7
-COPY --from=builder /mozjpeg /mozjpeg
+COPY --from=builder /opt/mozjpeg /opt/mozjpeg
 COPY ./optimize.sh /optimize.sh
+ENV PATH=${PATH}:/opt/mozjpeg/bin
