@@ -1,5 +1,5 @@
 FROM alpine:3.7 as builder
-ENV MOZJPEG_VERSION 3.3.1
+ARG MOZJPEG_VERSION=3.3.1
 
 
 RUN apk --update add \
