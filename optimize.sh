@@ -5,7 +5,7 @@ E_INVALID_USAGE=1
 USAGE=$(cat <<-END
 Usage: $0 file [options]
 Examples:
-  $0 ./input.jpg -optimize -progressive -outfile ./output.jpg
+  $0 ./input.jpg -quality 80 -outfile ./output.jpg
 END
 )
 
@@ -21,11 +21,11 @@ shift
 echo $@ | grep -qe '-outfile\b'
 INPLACE=$?
 
-if [ "$INPLACE" == "1" ]
+if [ $INPLACE -eq 1 ]
 then
 	tmpfile=$(mktemp)
 	cjpeg $@ -outfile ${tmpfile} $INPUTFILE
 	mv ${tmpfile} $INPUTFILE
 else
-	cjpeg $@ $INPUTFILE
+	exec cjpeg $@ $INPUTFILE
 fi

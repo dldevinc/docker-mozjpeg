@@ -14,9 +14,11 @@ RUN apk --update add \
 WORKDIR /src
 ADD https://github.com/mozilla/mozjpeg/archive/v${VERSION}.tar.gz ./
 RUN tar -xzf v${VERSION}.tar.gz
-
-WORKDIR /src/mozjpeg-${VERSION}
-RUN autoreconf -fiv && ./configure --with-jpeg8 && make install
+RUN cd /src/mozjpeg-${VERSION} && \
+	autoreconf -fiv && \
+	./configure --with-jpeg8 && \
+	make && \
+	make install
 
 
 FROM alpine:3.7
