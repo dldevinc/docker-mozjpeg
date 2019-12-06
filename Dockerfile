@@ -1,4 +1,4 @@
-FROM alpine:3.7 as builder
+FROM alpine as builder
 ARG VERSION=3.3.1
 
 
@@ -21,9 +21,9 @@ RUN cd /src/mozjpeg-${VERSION} && \
 	make install
 
 
-FROM alpine:3.7
-COPY --from=builder /opt/mozjpeg /opt/mozjpeg
-COPY ./optimize.sh /optimize.sh
+FROM bugoman/pexec
 
-ENV PATH=${PATH}:/opt/mozjpeg/bin
-CMD /optimize.sh
+COPY --from=builder /opt/mozjpeg /opt/mozjpeg
+COPY ./docker-entrypoint.sh /usr/local/bin/
+
+ENTRYPOINT ["docker-entrypoint.sh"]
