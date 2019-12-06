@@ -6,6 +6,8 @@ USAGE=$(cat <<-END
 Usage: $0 file [options]
 Examples:
   $0 ./input.jpg -quality 80 -outfile ./output.jpg
+  $0 ./input.jpg -quality 80
+  $0 ./images -quality 80
 END
 )
 
