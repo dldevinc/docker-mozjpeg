@@ -1,29 +1,30 @@
-FROM alpine as builder
-ARG VERSION=3.3.1
-
+FROM alpine AS builder
+ARG VERSION=4.1.1
 
 RUN apk --update add \
-	autoconf \
-	automake \
-	build-base \
-	libtool \
-	nasm \
-	pkgconf \
-	tar
+  cmake \
+  clang \
+  make \
+  nasm
 
 WORKDIR /src
-ADD https://github.com/mozilla/mozjpeg/archive/v${VERSION}.tar.gz ./
-RUN tar -xzf v${VERSION}.tar.gz
-RUN cd /src/mozjpeg-${VERSION} && \
-	autoreconf -fiv && \
-	./configure --with-jpeg8 && \
-	make && \
-	make install
+
+RUN wget -qO v${VERSION}.tar.gz https://codeload.github.com/mozilla/mozjpeg/tar.gz/v${VERSION} \
+ && tar -xzf v${VERSION}.tar.gz \
+ && cd ./mozjpeg-${VERSION} \
+ && cmake -G"Unix Makefiles" -DPNG_SUPPORTED=0 -DCMAKE_BUILD_TYPE=Release . \
+ && make \
+ && make install
 
 
-FROM bugoman/pexec
-
+FROM alpine
 COPY --from=builder /opt/mozjpeg /opt/mozjpeg
-COPY ./docker-entrypoint.sh /usr/local/bin/
 
-ENTRYPOINT ["docker-entrypoint.sh"]
+RUN mkdir /input \
+ && mkdir /output
+
+ADD ./batch.sh /usr/local/bin
+
+ENV PATH="$PATH:/opt/mozjpeg/bin"
+
+CMD ["batch.sh"]
